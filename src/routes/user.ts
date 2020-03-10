@@ -10,6 +10,7 @@ interface User {
 let users: User[] = [
   { name: '건우', email: 'rjsdn@appm' },
   { name: '재건', email: 'worjs@appm' },
+  { name: '중민', email: 'wndals@appm' },
 ];
 
 userRouter.get('/', (req: Request, res: Response) => {
@@ -19,8 +20,7 @@ userRouter.get('/', (req: Request, res: Response) => {
 });
 
 userRouter.post('/', (req: Request, res: Response) => {
-  const { body } = req; //비구조화 할당 == import
-  console.log(body);
+  const { body } = req; //비구조화 할당 == req.body를 body 라는 이름 그대로 가져와 사용
 
   if (!body.name || !body.email) {
     return res.status(400).json({ message: 'name or email is Not Found' });
@@ -64,8 +64,14 @@ userRouter.put('/', (req: Request, res: Response) => {
   const body: FuckingUpdate = req.body;
 
   //수정 대상 검증
-  if (users.findIndex(user => user.email === body.find.email) === -1) {
-    return res.status(400).json({ message: 'Not Found Email' });
+
+  if (
+    typeof body.find.email !== 'string' ||
+    users.findIndex(user => user.email === body.find.email) === -1
+  ) {
+    return res
+      .status(400)
+      .json({ message: 'Fucking Type Error Or Fucking Not Found Email' });
   }
   //수정 데이터 검증
   if (!body.find || !body.update || !body.find.email) {

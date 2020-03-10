@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction, Router } from 'express';
 import * as http from 'http';
 import * as bodyParser from 'body-parser';
-import { apiRouter } from './routes'; //
+import { apiRouter } from './routes';
 
 const app = express();
 
@@ -18,10 +18,14 @@ app.use(
 );
 
 app.use('/', apiRouter); // 해당 url로 요청이 들어오면 요청을 apiRouter로 보냄
+
 app.use((req, res) => {
+  // 나머지 갈길잃은 요청들에게 400에러를 뿌려주는 역할
   res.status(400).send('Route not found error');
 });
-app.set('port', 3000);
+
+app.set('port', 3000); // port 3000으로 요청을 받음
 http.createServer(app).listen(3000, () => {
+  // port 3000으로 Open
   console.log('Server Opened');
 });
